@@ -1,0 +1,40 @@
+url endpoints
+
+/api/todos/
+/dashboard
+/api/register
+
+
+Token Retrieval and Redirect:
+
+It first retrieves the token from the browser's local storage.
+If the token is not available, it redirects the user to the login page (/index.html). This ensures that only authenticated users can access the dashboard.
+
+Form Submission for Adding ToDo Item:
+It attaches an event listener to the form with the id addForm.
+When the form is submitted, it prevents the default form submission behavior.
+It extracts the values of the title and description fields from the form.
+It constructs a data object with these values.
+It sends a POST request to the /api/todos/ endpoint with the token included in the request headers.
+Upon successful addition of the ToDo item, it fetches and renders the updated list of ToDo items.
+
+Function to Fetch and Render ToDo Items:
+It defines a function fetchAndRenderToDoItems() to fetch ToDo items from the /api/todos/ endpoint.
+It sends a GET request to the endpoint with the token included in the request headers.
+Upon receiving the response, it renders the ToDo items on the dashboard.
+
+Function to Render ToDo Items:
+It defines a function renderToDoItems(items) to render the ToDo items on the dashboard.
+It clears the previous items from the todoList element.
+It iterates over the list of items received from the API response and creates DOM elements for each item, including a delete button.
+
+Function to Handle Deletion of ToDo Item:
+It defines a function deleteToDoItem(id) to handle the deletion of a ToDo item.
+It sends a DELETE request to the /api/todos/<id>/ endpoint with the token included in the request headers.
+Upon successful deletion, it fetches and renders the updated list of ToDo items.
+
+Initial Fetch and Render of ToDo Items:
+It immediately fetches and renders the initial list of ToDo items when the dashboard page loads.
+
+
+didn't had much time for making frontend. test in postman, Django framework. 

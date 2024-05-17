@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">ToDo App</h1>
+
+    <!-- Token Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form id="tokenForm">
+                <h2>Get Token</h2>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Get Token</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ToDo List -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h2>To Do List</h2>
+            <ul id="todoList" class="list-group">
+                <!-- To Do items will be added here -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Submit token form
+        $('#tokenForm').submit(function (event) {
+            event.preventDefault();
+            var formData = {
+                'username': $('#username').val(),
+                'password': $('#password').val()
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/api-token-auth/',
+                data: formData,
+                success: function (response) {
+                    alert('Token obtained: ' + response.token);
+                    // Save token in local storage or session storage for further requests
+                },
+                error: function (xhr, status, error) {
+                    alert('Error: ' + xhr.responseJSON.non_field_errors[0]);
+                }
+            });
+        });
+
+      
+        function fetchToDoList(token) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/todos/',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Token ' + token);
+                },
+                success: function (response) {
+                    $('#todoList').empty();
+                    $.each(response, function (index, item) {
+                        $('#todoList').append('<li class="list-group-item">' + item.title + '</li>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert('Error: ' + error);
+                }
+            });
+        }
+
+        // Example: Fetch ToDo list after obtaining token
+        // Replace 'your-token-here' with the obtained token
+        // fetchToDoList('your-token-here');
+    });
+</script>
+
+</body>
+</html>
